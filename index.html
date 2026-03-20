@@ -1,0 +1,2579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Connect</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --netflix-red: #E50914;
+  --netflix-red-dark: #B00710;
+  --bg: #141414;
+  --bg2: #1a1a1a;
+  --bg3: #222;
+  --bg4: #2a2a2a;
+  --surface: #1f1f1f;
+  --surface2: #2d2d2d;
+  --border: #333;
+  --text: #fff;
+  --text2: #b3b3b3;
+  --text3: #6b6b6b;
+  --green: #46d369;
+  --gold: #f5c518;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ——— NAVBAR ——— */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: linear-gradient(to bottom, rgba(0,0,0,.9) 0%, transparent 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  height: 68px;
+  gap: 32px;
+  transition: background .3s;
+}
+.navbar.solid { background: rgba(20,20,20,.98); }
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--netflix-red);
+  letter-spacing: 2px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-logo span { color: #fff; font-size: 16px; letter-spacing: 1px; margin-top: 4px; }
+.nav-links { display:flex; gap:20px; flex:1; }
+.nav-link {
+  color: var(--text2);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color .2s;
+  text-decoration: none;
+}
+.nav-link:hover, .nav-link.active { color: #fff; }
+.nav-right { display:flex; align-items:center; gap:16px; margin-left:auto; }
+.nav-icon {
+  width:20px; height:20px; cursor:pointer; opacity:.8;
+  transition: opacity .2s;
+}
+.nav-icon:hover { opacity:1; }
+.nav-avatar {
+  width:32px; height:32px; border-radius:4px;
+  background: linear-gradient(135deg, #e50914, #831010);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; cursor:pointer;
+  position: relative;
+}
+.nav-notif-dot {
+  position: absolute; top:-3px; right:-3px;
+  width:8px; height:8px; border-radius:50%;
+  background: var(--netflix-red);
+  border: 2px solid var(--bg);
+}
+
+/* ——— PAGE SYSTEM ——— */
+.page { display:none; padding-top: 68px; min-height:100vh; }
+.page.active { display:block; }
+
+/* ——— HERO SECTION ——— */
+.hero {
+  position: relative;
+  height: 75vh;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+  padding: 0 48px 60px;
+}
+.hero-bg {
+  position: absolute; inset:0;
+  background: linear-gradient(to right, #000 0%, transparent 60%),
+              linear-gradient(to top, #141414 0%, transparent 50%),
+              url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1400&q=80') center/cover;
+}
+.hero-content { position:relative; z-index:2; max-width: 500px; }
+.hero-tag {
+  display:inline-block;
+  background: var(--netflix-red);
+  color:#fff;
+  font-size:11px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  padding: 4px 10px; border-radius:2px;
+  margin-bottom:12px;
+}
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:56px; line-height:.95; margin-bottom:16px; }
+.hero-meta { color: var(--text2); font-size:14px; margin-bottom:20px; }
+.hero-meta span { color:var(--green); font-weight:600; }
+.hero-desc { color:#ccc; font-size:15px; line-height:1.6; margin-bottom:28px; }
+.hero-btns { display:flex; gap:12px; }
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding: 11px 24px; border-radius:4px;
+  font-size:15px; font-weight:600;
+  cursor:pointer; border:none;
+  transition: all .2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn-primary { background:#fff; color:#000; }
+.btn-primary:hover { background:#e0e0e0; }
+.btn-secondary { background:rgba(109,109,110,.7); color:#fff; }
+.btn-secondary:hover { background:rgba(109,109,110,.9); }
+.btn-red { background:var(--netflix-red); color:#fff; }
+.btn-red:hover { background:var(--netflix-red-dark); }
+.btn-ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.4); }
+.btn-ghost:hover { background:rgba(255,255,255,.1); }
+
+/* ——— ROWS ——— */
+.row { padding: 0 48px; margin-bottom:40px; }
+.row-header {
+  display:flex; align-items:center; gap:16px;
+  margin-bottom:16px;
+}
+.row-title { font-size:20px; font-weight:700; }
+.row-explore { color:var(--netflix-red); font-size:13px; font-weight:600; cursor:pointer; }
+.row-explore:hover { text-decoration:underline; }
+
+.scroll-row {
+  display:flex; gap:8px; overflow-x:auto;
+  padding-bottom:8px;
+  scrollbar-width:none;
+}
+.scroll-row::-webkit-scrollbar { display:none; }
+
+.card {
+  flex-shrink:0; border-radius:4px; overflow:hidden;
+  position:relative; cursor:pointer;
+  transition: transform .3s, box-shadow .3s;
+}
+.card:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(0,0,0,.7); z-index:10; }
+.card img { width:100%; height:100%; object-fit:cover; display:block; }
+.card-overlay {
+  position:absolute; inset:0;
+  background: linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 60%);
+  opacity:0; transition:opacity .3s;
+  padding:12px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+}
+.card:hover .card-overlay { opacity:1; }
+.card-title { font-size:12px; font-weight:700; margin-bottom:4px; }
+.card-meta { font-size:11px; color:var(--text2); }
+.card-actions { display:flex; gap:6px; margin-bottom:8px; }
+.card-btn {
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; border:none; font-size:12px;
+  transition: background .2s;
+}
+.card-btn-play { background:#fff; color:#000; }
+.card-btn-play:hover { background:#ddd; }
+.card-btn-add { background:rgba(60,60,60,.8); color:#fff; border:1.5px solid rgba(255,255,255,.5); }
+.card-btn-add:hover { border-color:#fff; }
+
+/* Social badge on cards */
+.card-social-badge {
+  position:absolute; top:8px; right:8px;
+  background:rgba(20,20,20,.85);
+  border:1px solid rgba(229,9,20,.4);
+  border-radius:12px; padding:3px 8px;
+  display:flex; align-items:center; gap:4px;
+  font-size:10px; color:var(--text2);
+  backdrop-filter:blur(8px);
+}
+.card-social-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--green); }
+.card-friend-bar {
+  position:absolute; bottom:0; left:0; right:0;
+  background:rgba(15,15,15,.9); border-top:1px solid var(--border);
+  padding:6px 10px; display:flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--text2); opacity:0; transition: opacity .3s;
+}
+.card:hover .card-friend-bar { opacity:1; }
+.friend-avatar-mini {
+  width:18px; height:18px; border-radius:50%;
+  border:1.5px solid var(--bg);
+  margin-right:-6px; font-size:8px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ——— CONNECT PAGE (Social Hub) ——— */
+#page-connect { background: var(--bg); }
+
+.connect-header {
+  padding: 40px 48px 0;
+  display:flex; align-items:flex-end; justify-content:space-between;
+  margin-bottom:32px;
+}
+.connect-header h1 { font-family:'Bebas Neue',sans-serif; font-size:48px; }
+.connect-header p { color:var(--text2); font-size:15px; margin-top:6px; }
+
+.connect-grid {
+  display:grid;
+  grid-template-columns: 300px 1fr;
+  gap:24px;
+  padding: 0 48px 48px;
+}
+
+/* LEFT: Friend sidebar */
+.friends-sidebar {}
+.sidebar-section { margin-bottom:24px; }
+.sidebar-label {
+  font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:12px; font-weight:600;
+}
+.friend-item {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 12px; border-radius:6px;
+  cursor:pointer; transition: background .2s;
+  margin-bottom:4px;
+}
+.friend-item:hover { background:var(--bg3); }
+.friend-avatar {
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; flex-shrink:0;
+  position:relative;
+}
+.fa-online::after {
+  content:''; position:absolute; bottom:0; right:0;
+  width:10px; height:10px; border-radius:50%;
+  background:var(--green); border:2px solid var(--bg);
+}
+.friend-info { flex:1; min-width:0; }
+.friend-name { font-size:14px; font-weight:500; }
+.friend-status { font-size:12px; color:var(--text2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.friend-action { opacity:0; transition:opacity .2s; }
+.friend-item:hover .friend-action { opacity:1; }
+
+.activity-feed { }
+.activity-item {
+  display:flex; gap:12px; padding:12px;
+  border-radius:8px; margin-bottom:8px;
+  background:var(--surface); border:1px solid var(--border);
+  cursor:pointer; transition:border-color .2s;
+}
+.activity-item:hover { border-color:rgba(229,9,20,.3); }
+.activity-thumb {
+  width:56px; height:80px; border-radius:3px; overflow:hidden; flex-shrink:0;
+}
+.activity-thumb img { width:100%; height:100%; object-fit:cover; }
+.activity-body { flex:1; }
+.activity-user { font-size:13px; font-weight:600; margin-bottom:3px; }
+.activity-user span { color:var(--text2); font-weight:400; }
+.activity-show { font-size:12px; color:var(--text2); margin-bottom:6px; }
+.activity-time { font-size:11px; color:var(--text3); }
+.activity-react { display:flex; gap:8px; margin-top:8px; }
+.react-btn {
+  font-size:11px; color:var(--text2); background:var(--bg3);
+  border:none; border-radius:12px; padding:3px 10px;
+  cursor:pointer; transition:all .2s;
+}
+.react-btn:hover { background:var(--netflix-red); color:#fff; }
+
+/* ——— DISCUSSION FORUM ——— */
+#page-forum { }
+.forum-layout {
+  display:grid;
+  grid-template-columns: 240px 1fr 280px;
+  gap:0;
+  padding-top: 0;
+  min-height: calc(100vh - 68px);
+}
+.forum-sidebar {
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  padding:24px 0;
+  position:sticky; top:68px;
+  height: calc(100vh - 68px);
+  overflow-y:auto;
+}
+.forum-sidebar-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 20px; cursor:pointer;
+  font-size:14px; color:var(--text2);
+  transition:all .2s;
+}
+.forum-sidebar-item:hover, .forum-sidebar-item.active {
+  color:#fff; background:rgba(229,9,20,.1);
+  border-left:3px solid var(--netflix-red);
+}
+.forum-sidebar-item.active { font-weight:600; }
+.fsidebar-icon { font-size:16px; }
+
+.forum-main { padding:24px 32px; }
+.forum-show-header {
+  display:flex; gap:20px; align-items:flex-start;
+  padding:24px; border-radius:10px;
+  background:linear-gradient(135deg, var(--surface) 0%, rgba(229,9,20,.05) 100%);
+  border:1px solid var(--border);
+  margin-bottom:24px;
+}
+.forum-show-poster {
+  width:80px; height:112px; border-radius:6px; overflow:hidden; flex-shrink:0;
+}
+.forum-show-poster img { width:100%; height:100%; object-fit:cover; }
+.forum-show-info h2 { font-size:22px; font-weight:700; margin-bottom:4px; }
+.forum-show-info .season { color:var(--text2); font-size:13px; margin-bottom:12px; }
+.forum-tabs { display:flex; gap:4px; margin-bottom:24px; }
+.forum-tab {
+  padding:8px 18px; border-radius:20px; font-size:13px; font-weight:500;
+  cursor:pointer; border:1px solid var(--border); color:var(--text2);
+  background:transparent; transition:all .2s; font-family:'DM Sans',sans-serif;
+}
+.forum-tab:hover { border-color:#fff; color:#fff; }
+.forum-tab.active { background:var(--netflix-red); border-color:var(--netflix-red); color:#fff; }
+
+.post-composer {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:16px; margin-bottom:16px;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.post-textarea {
+  flex:1; background:var(--bg3); border:1px solid var(--border);
+  color:#fff; border-radius:8px; padding:12px; font-size:14px;
+  font-family:'DM Sans',sans-serif; resize:none; min-height:80px;
+  transition:border-color .2s;
+}
+.post-textarea:focus { outline:none; border-color:rgba(229,9,20,.5); }
+.post-textarea::placeholder { color:var(--text3); }
+.post-actions { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+.post-emoji-bar { display:flex; gap:8px; font-size:18px; cursor:pointer; }
+
+.post-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:16px; margin-bottom:12px;
+  transition:border-color .2s;
+}
+.post-card:hover { border-color:rgba(229,9,20,.2); }
+.post-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.post-avatar {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; flex-shrink:0;
+}
+.post-user { font-size:14px; font-weight:600; }
+.post-time { font-size:12px; color:var(--text3); margin-top:1px; }
+.post-badge {
+  margin-left:auto; font-size:10px; font-weight:600;
+  padding:2px 8px; border-radius:10px; letter-spacing:.5px;
+}
+.post-body { font-size:14px; line-height:1.6; color:#ddd; margin-bottom:14px; }
+.post-body .spoiler {
+  background:var(--bg3); border-radius:4px; padding:2px 8px;
+  cursor:pointer; font-style:italic; color:var(--text3);
+}
+.post-body .spoiler:hover { background:var(--bg4); color:var(--text2); }
+.post-footer { display:flex; gap:16px; align-items:center; }
+.post-stat {
+  display:flex; align-items:center; gap:5px;
+  font-size:13px; color:var(--text2); cursor:pointer;
+  transition:color .2s;
+}
+.post-stat:hover { color:var(--netflix-red); }
+.post-stat.liked { color:var(--netflix-red); }
+.post-stat svg { width:14px; height:14px; }
+
+/* trending sidebar */
+.forum-trending {
+  border-left:1px solid var(--border);
+  padding:24px;
+  position:sticky; top:68px;
+  height:calc(100vh - 68px);
+  overflow-y:auto;
+}
+.trending-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; padding:12px; margin-bottom:10px;
+  cursor:pointer; transition:border-color .2s;
+}
+.trending-card:hover { border-color:rgba(229,9,20,.3); }
+.trending-num { font-size:28px; font-weight:700; color:rgba(229,9,20,.3); line-height:1; }
+.trending-title { font-size:13px; font-weight:600; margin-top:2px; }
+.trending-count { font-size:11px; color:var(--text3); margin-top:2px; }
+
+/* ——— WATCH PARTY ——— */
+#page-watchparty {}
+.wp-layout {
+  display:grid;
+  grid-template-columns: 1fr 320px;
+  height: calc(100vh - 68px);
+}
+.wp-player {
+  position:relative; background:#000;
+  display:flex; align-items:center; justify-content:center;
+}
+.wp-player-overlay {
+  position:absolute; inset:0;
+  background:url('https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=900&q=80') center/cover;
+}
+.wp-player-grad {
+  position:absolute; inset:0;
+  background:rgba(0,0,0,.3);
+}
+.wp-controls {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(to top, rgba(0,0,0,.9), transparent);
+  padding:20px 24px 16px;
+}
+.wp-progress {
+  width:100%; height:4px; background:rgba(255,255,255,.2);
+  border-radius:2px; margin-bottom:12px; cursor:pointer;
+  position:relative;
+}
+.wp-progress-fill {
+  height:100%; background:var(--netflix-red);
+  border-radius:2px; width:34%;
+  position:relative;
+}
+.wp-progress-fill::after {
+  content:''; position:absolute; right:-6px; top:50%;
+  transform:translateY(-50%);
+  width:12px; height:12px; border-radius:50%; background:#fff;
+}
+.wp-ctrl-row { display:flex; align-items:center; gap:16px; }
+.wp-btn {
+  background:none; border:none; color:#fff; cursor:pointer;
+  font-size:20px; transition:transform .1s;
+}
+.wp-btn:hover { transform:scale(1.1); }
+.wp-time { font-size:13px; color:var(--text2); }
+.wp-title-area { margin-left:auto; text-align:right; }
+.wp-ep-title { font-size:14px; font-weight:600; }
+.wp-ep-sub { font-size:12px; color:var(--text2); }
+
+.wp-host-badge {
+  position:absolute; top:16px; left:16px;
+  background:rgba(229,9,20,.9); color:#fff;
+  font-size:11px; font-weight:700; letter-spacing:1px;
+  padding:4px 12px; border-radius:12px;
+}
+.wp-watching {
+  position:absolute; top:16px; right:16px;
+  background:rgba(0,0,0,.7); border:1px solid var(--border);
+  border-radius:20px; padding:6px 14px;
+  display:flex; align-items:center; gap:8px;
+  font-size:12px;
+}
+.live-dot { width:7px; height:7px; border-radius:50%; background:var(--netflix-red); animation:pulse 1.5s infinite; }
+
+/* CHAT PANEL */
+.wp-chat {
+  background:var(--surface); border-left:1px solid var(--border);
+  display:flex; flex-direction:column;
+}
+.wp-chat-header {
+  padding:16px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.wp-chat-header h3 { font-size:15px; font-weight:700; }
+.wp-party-members { display:flex; gap:4px; }
+.member-avatar {
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; border:2px solid var(--surface);
+  margin-left:-6px; cursor:pointer;
+}
+.member-avatar:first-child { margin-left:0; }
+.wp-messages {
+  flex:1; overflow-y:auto; padding:16px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.wp-messages::-webkit-scrollbar { width:4px; }
+.wp-messages::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+.msg {
+  display:flex; gap:8px; align-items:flex-start;
+}
+.msg-avatar {
+  width:28px; height:28px; border-radius:50%;
+  flex-shrink:0; display:flex; align-items:center;
+  justify-content:center; font-size:10px; font-weight:700;
+}
+.msg-body { flex:1; }
+.msg-name { font-size:11px; font-weight:600; margin-bottom:2px; }
+.msg-text { font-size:13px; color:#ddd; line-height:1.4; }
+.msg-text .emoji { font-size:18px; }
+.msg-self { flex-direction:row-reverse; }
+.msg-self .msg-bubble {
+  background:var(--netflix-red); border-radius:12px 4px 12px 12px;
+  padding:8px 12px; max-width:200px;
+}
+.msg-time { font-size:10px; color:var(--text3); margin-top:2px; }
+
+.reaction-row {
+  display:flex; gap:6px; padding:0 16px 8px;
+  overflow-x:auto;
+}
+.reaction-row::-webkit-scrollbar { display:none; }
+.reaction-pill {
+  flex-shrink:0; background:var(--bg3); border:1px solid var(--border);
+  border-radius:20px; padding:5px 12px; font-size:13px;
+  cursor:pointer; transition:all .15s; white-space:nowrap;
+}
+.reaction-pill:hover { background:rgba(229,9,20,.15); border-color:rgba(229,9,20,.4); }
+
+.wp-input-area {
+  padding:12px 16px; border-top:1px solid var(--border);
+  display:flex; gap:10px; align-items:center;
+}
+.wp-input {
+  flex:1; background:var(--bg3); border:1px solid var(--border);
+  color:#fff; border-radius:20px; padding:9px 16px;
+  font-size:13px; font-family:'DM Sans',sans-serif;
+}
+.wp-input:focus { outline:none; border-color:rgba(229,9,20,.4); }
+.wp-send {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--netflix-red); border:none; color:#fff;
+  font-size:16px; cursor:pointer; display:flex;
+  align-items:center; justify-content:center;
+  transition:background .2s;
+}
+.wp-send:hover { background:var(--netflix-red-dark); }
+
+/* ——— WRAPPED ——— */
+#page-wrapped {
+  background: #0a0a0a;
+  min-height:100vh;
+}
+.wrapped-hero {
+  text-align:center; padding:60px 48px 40px;
+  position:relative; overflow:hidden;
+}
+.wrapped-bg {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(229,9,20,.2) 0%, transparent 60%);
+}
+.wrapped-year {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:120px; line-height:1;
+  background:linear-gradient(135deg, #E50914 0%, #ff6b6b 50%, #E50914 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  position:relative; z-index:1;
+}
+.wrapped-subtitle { font-size:18px; color:var(--text2); margin-top:-8px; position:relative; z-index:1; }
+.wrapped-username { color:#fff; font-weight:700; }
+
+.wrapped-stats {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:16px; padding:0 48px; margin-bottom:32px;
+}
+.wrapped-stat-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:28px 24px; text-align:center;
+  position:relative; overflow:hidden;
+  transition:transform .2s, border-color .2s;
+}
+.wrapped-stat-card::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:100px; height:100px; border-radius:50%;
+  background:rgba(229,9,20,.08);
+}
+.wrapped-stat-card:hover { transform:translateY(-4px); border-color:rgba(229,9,20,.3); }
+.wrapped-stat-num {
+  font-family:'Bebas Neue',sans-serif; font-size:52px;
+  color:var(--netflix-red); line-height:1;
+}
+.wrapped-stat-label { font-size:13px; color:var(--text2); margin-top:4px; }
+
+.wrapped-sections { display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:0 48px 48px; }
+.wrapped-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:24px; overflow:hidden;
+  transition:border-color .2s;
+}
+.wrapped-card:hover { border-color:rgba(229,9,20,.3); }
+.wrapped-card-title { font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text3); margin-bottom:16px; font-weight:600; }
+
+.genre-bar { margin-bottom:10px; }
+.genre-label { display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; }
+.genre-bar-bg { height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+.genre-bar-fill { height:100%; background:linear-gradient(to right, var(--netflix-red), #ff6b6b); border-radius:3px; transition:width 1s; }
+
+.top-show-item {
+  display:flex; align-items:center; gap:12px; padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.top-show-rank { font-family:'Bebas Neue',sans-serif; font-size:28px; color:rgba(229,9,20,.4); width:30px; }
+.top-show-thumb { width:44px; height:62px; border-radius:4px; overflow:hidden; flex-shrink:0; }
+.top-show-thumb img { width:100%; height:100%; object-fit:cover; }
+.top-show-info { flex:1; }
+.top-show-title { font-size:14px; font-weight:600; }
+.top-show-eps { font-size:12px; color:var(--text2); margin-top:2px; }
+.top-show-bar { height:3px; background:var(--bg3); border-radius:2px; margin-top:6px; overflow:hidden; }
+.top-show-bar-fill { height:100%; background:var(--netflix-red); }
+
+.wrapped-share-section { padding:0 48px 48px; text-align:center; }
+.share-card-preview {
+  max-width:400px; margin:0 auto 24px;
+  background:linear-gradient(135deg, #1a0000 0%, #2d0000 50%, #1a0000 100%);
+  border:1px solid rgba(229,9,20,.3); border-radius:16px;
+  padding:32px; position:relative; overflow:hidden;
+}
+.share-card-preview::before {
+  content:'NETFLIX CONNECT'; position:absolute;
+  top:12px; left:0; right:0; text-align:center;
+  font-size:11px; letter-spacing:3px; color:rgba(229,9,20,.6);
+  font-weight:700;
+}
+.share-big { font-family:'Bebas Neue',sans-serif; font-size:72px; color:var(--netflix-red); line-height:1; }
+.share-label { font-size:14px; color:var(--text2); margin-top:4px; }
+
+/* ——— REFERRAL ——— */
+#page-referral {}
+.referral-hero {
+  padding:60px 48px 48px;
+  background:linear-gradient(135deg, #1a0000 0%, #141414 60%);
+  border-bottom:1px solid var(--border);
+}
+.referral-hero h1 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:64px; line-height:1;
+  margin-bottom:16px;
+}
+.referral-hero h1 span { color:var(--netflix-red); }
+.referral-hero p { font-size:18px; color:var(--text2); max-width:560px; line-height:1.6; margin-bottom:32px; }
+.referral-link-box {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:16px 20px;
+  display:flex; align-items:center; gap:12px;
+  max-width:520px; margin-bottom:24px;
+}
+.referral-url { font-size:14px; color:var(--text2); flex:1; font-family:monospace; }
+.referral-copied { color:var(--green); font-size:13px; font-weight:600; display:none; }
+.referral-copied.show { display:block; }
+
+.referral-stats {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  padding:32px 48px;
+}
+.ref-stat {
+  text-align:center; padding:28px; border-radius:12px;
+  background:var(--surface); border:1px solid var(--border);
+}
+.ref-stat-num { font-family:'Bebas Neue',sans-serif; font-size:56px; margin-bottom:4px; }
+.ref-stat-label { font-size:14px; color:var(--text2); }
+
+.referral-how { padding:0 48px 48px; }
+.referral-how h2 { font-size:24px; font-weight:700; margin-bottom:24px; }
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.step {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:28px; position:relative;
+}
+.step-num {
+  font-family:'Bebas Neue',sans-serif; font-size:48px;
+  color:rgba(229,9,20,.2); position:absolute; top:16px; right:20px;
+}
+.step-icon { font-size:28px; margin-bottom:12px; }
+.step-title { font-size:16px; font-weight:700; margin-bottom:8px; }
+.step-desc { font-size:14px; color:var(--text2); line-height:1.5; }
+
+.referral-history { padding:0 48px 48px; }
+.referral-history h2 { font-size:24px; font-weight:700; margin-bottom:20px; }
+.referral-table {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; overflow:hidden;
+}
+.rt-header {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  padding:12px 20px; background:var(--bg3);
+  font-size:11px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--text3); font-weight:600;
+}
+.rt-row {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  padding:14px 20px; border-top:1px solid var(--border);
+  font-size:14px; align-items:center;
+  transition:background .2s;
+}
+.rt-row:hover { background:rgba(255,255,255,.03); }
+.rt-status {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:12px; font-weight:600; padding:3px 10px;
+  border-radius:12px;
+}
+.status-active { background:rgba(70,211,105,.15); color:var(--green); }
+.status-pending { background:rgba(255,165,0,.12); color:orange; }
+.status-expired { background:rgba(255,255,255,.08); color:var(--text3); }
+
+/* ——— PROFILE ——— */
+#page-profile {}
+.profile-cover {
+  height:260px; position:relative; overflow:hidden;
+  background:linear-gradient(135deg, #8b0000 0%, #1a0000 100%);
+}
+.profile-cover-img {
+  position:absolute; inset:0; opacity:.4;
+  background:url('https://images.unsplash.com/photo-1574267432553-4b4628081c31?w=1400&q=80') center/cover;
+}
+.profile-cover-grad {
+  position:absolute; bottom:0; left:0; right:0; height:50%;
+  background:linear-gradient(to top, var(--bg) 0%, transparent 100%);
+}
+.profile-header {
+  display:flex; align-items:flex-end; gap:24px;
+  padding:0 48px; margin-top:-60px; margin-bottom:32px;
+  position:relative; z-index:2;
+}
+.profile-big-avatar {
+  width:120px; height:120px; border-radius:50%;
+  border:4px solid var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  font-size:42px; font-weight:700; flex-shrink:0;
+  background:linear-gradient(135deg, #E50914, #831010);
+}
+.profile-info { flex:1; padding-bottom:8px; }
+.profile-name { font-size:28px; font-weight:700; margin-bottom:4px; }
+.profile-handle { color:var(--text2); font-size:14px; margin-bottom:12px; }
+.profile-stats { display:flex; gap:28px; }
+.profile-stat { text-align:center; cursor:pointer; }
+.profile-stat-num { font-size:20px; font-weight:700; }
+.profile-stat-label { font-size:12px; color:var(--text2); margin-top:2px; }
+.profile-actions { display:flex; gap:10px; padding-bottom:8px; }
+
+.profile-tabs { display:flex; gap:0; border-bottom:1px solid var(--border); padding:0 48px; margin-bottom:24px; }
+.profile-tab {
+  padding:14px 24px; font-size:14px; font-weight:500;
+  cursor:pointer; color:var(--text2); border-bottom:2px solid transparent;
+  transition:all .2s; margin-bottom:-1px;
+}
+.profile-tab.active { color:#fff; border-bottom-color:var(--netflix-red); }
+.profile-tab:hover { color:#fff; }
+
+.profile-grid { padding:0 48px 48px; }
+.profile-watchlist {
+  display:grid; grid-template-columns:repeat(6, 1fr); gap:8px;
+}
+.watchlist-item { border-radius:4px; overflow:hidden; aspect-ratio:2/3; cursor:pointer; position:relative; }
+.watchlist-item img { width:100%; height:100%; object-fit:cover; display:block; }
+.watchlist-item-overlay {
+  position:absolute; inset:0;
+  background:rgba(0,0,0,.6); opacity:0; transition:opacity .2s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.watchlist-item:hover .watchlist-item-overlay { opacity:1; }
+
+/* ——— ANIMATIONS ——— */
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+@keyframes slideIn { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+@keyframes msgPop { 0%{transform:translateY(8px);opacity:0;} 100%{transform:translateY(0);opacity:1;} }
+
+.page.active { animation:fadeIn .3s ease; }
+.post-card { animation:slideIn .3s ease both; }
+
+/* Toast */
+.toast {
+  position:fixed; bottom:32px; right:32px; z-index:9999;
+  background:var(--surface); border:1px solid var(--border);
+  border-left:4px solid var(--netflix-red);
+  border-radius:8px; padding:14px 18px;
+  font-size:14px; box-shadow:0 8px 30px rgba(0,0,0,.5);
+  transform:translateX(200px); opacity:0;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  max-width:300px;
+}
+.toast.show { transform:translateX(0); opacity:1; }
+
+/* Notification panel */
+.notif-panel {
+  position:fixed; top:68px; right:16px; z-index:999;
+  width:340px; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; box-shadow:0 16px 48px rgba(0,0,0,.7);
+  overflow:hidden; display:none;
+}
+.notif-panel.open { display:block; animation:slideIn .2s ease; }
+.notif-header { padding:16px 20px; border-bottom:1px solid var(--border); font-weight:700; }
+.notif-item {
+  display:flex; align-items:center; gap:12px; padding:14px 20px;
+  border-bottom:1px solid rgba(255,255,255,.04); cursor:pointer;
+  transition:background .2s;
+}
+.notif-item:hover { background:rgba(255,255,255,.04); }
+.notif-item.unread { background:rgba(229,9,20,.05); }
+.notif-icon { font-size:20px; width:36px; text-align:center; }
+.notif-body { flex:1; }
+.notif-text { font-size:13px; color:var(--text2); line-height:1.4; }
+.notif-text strong { color:#fff; }
+.notif-time { font-size:11px; color:var(--text3); margin-top:2px; }
+
+/* modal */
+.modal-overlay {
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,.8); backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center;
+}
+.modal-overlay.open { display:flex; animation:fadeIn .2s ease; }
+.modal {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:12px; padding:32px; max-width:480px; width:90%;
+  position:relative;
+}
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  background:none; border:none; color:var(--text2);
+  font-size:20px; cursor:pointer;
+}
+.modal h2 { font-size:22px; font-weight:700; margin-bottom:8px; }
+.modal p { color:var(--text2); font-size:14px; margin-bottom:24px; }
+.input-field {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  color:#fff; border-radius:8px; padding:12px 16px;
+  font-size:14px; font-family:'DM Sans',sans-serif;
+  transition:border-color .2s; margin-bottom:12px;
+}
+.input-field:focus { outline:none; border-color:rgba(229,9,20,.5); }
+.friend-suggest-item {
+  display:flex; align-items:center; gap:12px; padding:10px 12px;
+  border-radius:8px; cursor:pointer; transition:background .2s;
+}
+.friend-suggest-item:hover { background:var(--bg3); }
+.fs-avatar {
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700;
+}
+.fs-info { flex:1; }
+.fs-name { font-size:14px; font-weight:600; }
+.fs-mutual { font-size:12px; color:var(--text3); }
+
+/* Show picker */
+.show-pick-btn {
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  color: #b3b3b3; border-radius: 20px; padding: 5px 14px; font-size: 12px;
+  font-weight: 600; cursor: pointer; white-space: nowrap; font-family:'DM Sans',sans-serif;
+  transition: all .2s; flex-shrink: 0;
+}
+.show-pick-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+.show-pick-btn.active { background: var(--netflix-red); border-color: var(--netflix-red); color: #fff; }
+
+/* Video modal */
+.video-modal-overlay {
+  position:fixed; inset:0; z-index:3000;
+  background:rgba(0,0,0,.9); display:none;
+  align-items:center; justify-content:center;
+}
+.video-modal-overlay.open { display:flex; animation:fadeIn .2s ease; }
+.video-modal-box {
+  width:90vw; max-width:960px; aspect-ratio:16/9;
+  position:relative; border-radius:8px; overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.8);
+}
+.video-modal-close {
+  position:absolute; top:-40px; right:0;
+  background:none; border:none; color:#fff;
+  font-size:22px; cursor:pointer; z-index:10;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,.15); border-radius:3px; }
+
+/* Tag pills */
+.tag { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; letter-spacing:.5px; }
+.tag-new { background:rgba(229,9,20,.2); color:var(--netflix-red); }
+.tag-hot { background:rgba(255,165,0,.15); color:orange; }
+.tag-spoiler { background:rgba(255,255,255,.08); color:var(--text2); }
+
+/* Section header with icon */
+.section-icon-header {
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.section-icon { font-size:20px; }
+.section-h { font-size:16px; font-weight:700; }
+
+/* Mobile warning (won't show on desktop) */
+@media(max-width:768px){
+  .navbar { padding:0 20px; }
+  .row, .connect-grid, .wrapped-stats, .referral-stats { padding:0 20px; }
+  .forum-layout { grid-template-columns:1fr; }
+  .forum-sidebar, .forum-trending { display:none; }
+  .wrapped-stats, .referral-stats, .steps { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="mainNav">
+  <div class="nav-logo" onclick="navigate('home')">NETFLIX <span>CONNECT</span></div>
+  <div class="nav-links">
+    <a class="nav-link active" onclick="navigate('home')" id="nav-home">Home</a>
+    <a class="nav-link" onclick="navigate('connect')" id="nav-connect">Connect</a>
+    <a class="nav-link" onclick="navigate('forum')" id="nav-forum">Discuss</a>
+    <a class="nav-link" onclick="navigate('watchparty')" id="nav-watchparty">Watch Party</a>
+    <a class="nav-link" onclick="navigate('wrapped')" id="nav-wrapped">Wrapped</a>
+    <a class="nav-link" onclick="navigate('referral')" id="nav-referral">Referral</a>
+    <a class="nav-link" onclick="navigate('profile')" id="nav-profile">My Profile</a>
+  </div>
+  <div class="nav-right">
+    <svg class="nav-icon" onclick="toggleNotif()" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+    </svg>
+    <svg class="nav-icon" onclick="openModal('add-friend')" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+    <div class="nav-avatar" onclick="navigate('profile')">
+      M<div class="nav-notif-dot"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-header">Notifications</div>
+  <div class="notif-item unread">
+    <div class="notif-icon">🍿</div>
+    <div class="notif-body">
+      <div class="notif-text"><strong>Ryan</strong> started a Watch Party for Stranger Things S4</div>
+      <div class="notif-time">2 min ago</div>
+    </div>
+  </div>
+  <div class="notif-item unread">
+    <div class="notif-icon">💬</div>
+    <div class="notif-body">
+      <div class="notif-text"><strong>Jean</strong> replied to your comment in the Stranger Things forum</div>
+      <div class="notif-time">18 min ago</div>
+    </div>
+  </div>
+  <div class="notif-item unread">
+    <div class="notif-icon">🎁</div>
+    <div class="notif-body">
+      <div class="notif-text">Your referral <strong>Lucas</strong> just joined! You earned 1 free month.</div>
+      <div class="notif-time">1 hr ago</div>
+    </div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-icon">👤</div>
+    <div class="notif-body">
+      <div class="notif-text"><strong>Caleb</strong> is now following you</div>
+      <div class="notif-time">3 hrs ago</div>
+    </div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-icon">🔥</div>
+    <div class="notif-body">
+      <div class="notif-text">Your <strong>Netflix Wrapped 2025</strong> is ready to share!</div>
+      <div class="notif-time">Yesterday</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ HOME ════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">🔴 Friends are watching</div>
+      <h1 class="hero-title">Stranger Things</h1>
+      <div class="hero-meta"><span>98% Match</span> · 2022 · TV-14 · 4 Seasons</div>
+      <p class="hero-desc">When a young boy vanishes, a small town uncovers a mystery involving secret experiments and supernatural forces.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" onclick="openVideo('Stranger Things')">▶ Play Trailer</button>
+        <button class="btn btn-secondary">ⓘ More Info</button>
+        <button class="btn btn-ghost" onclick="navigate('watchparty')">🍿 Watch with Friends</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-header">
+      <span class="row-title">👥 Friends Are Watching</span>
+      <span class="row-explore" onclick="navigate('connect')">See all activity →</span>
+    </div>
+    <div class="scroll-row">
+      <!-- Card 1 -->
+      <div class="card" style="width:185px;height:104px;" onclick="openVideo('The Bear')">
+        <img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&q=80" alt="">
+        <div class="card-social-badge"><div class="dot"></div> Ryan · 1h 23m in</div>
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="showToast('Added to your list!')">+</button>
+          </div>
+          <div class="card-title">The Bear</div>
+          <div class="card-meta">S3 · E4</div>
+        </div>
+        <div class="card-friend-bar">
+          <div class="friend-avatar-mini" style="background:#e74c3c;">R</div>
+          <span style="margin-left:8px;">Ryan is watching this</span>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="card" style="width:185px;height:104px;">
+        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&q=80" alt="">
+        <div class="card-social-badge"><div class="dot"></div> Jean · Just started</div>
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="showToast('Added to your list!')">+</button>
+          </div>
+          <div class="card-title">Wednesday</div>
+          <div class="card-meta">S2 · E1</div>
+        </div>
+        <div class="card-friend-bar">
+          <div class="friend-avatar-mini" style="background:#9b59b6;">J</div>
+          <span style="margin-left:8px;">Jean started watching</span>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card" style="width:185px;height:104px;">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&q=80" alt="">
+        <div class="card-social-badge"><div class="dot"></div> 3 friends watched</div>
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="showToast('Added to your list!')">+</button>
+          </div>
+          <div class="card-title">Squid Game</div>
+          <div class="card-meta">S3 · E3</div>
+        </div>
+        <div class="card-friend-bar">
+          <div class="friend-avatar-mini" style="background:#3498db;">L</div>
+          <div class="friend-avatar-mini" style="background:#27ae60;">C</div>
+          <div class="friend-avatar-mini" style="background:#e74c3c;">R</div>
+          <span style="margin-left:10px;">and 3 friends</span>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="card" style="width:185px;height:104px;">
+        <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=300&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="showToast('Added to your list!')">+</button>
+          </div>
+          <div class="card-title">Fallout</div>
+          <div class="card-meta">S1 · E8</div>
+        </div>
+      </div>
+      <!-- Card 5 -->
+      <div class="card" style="width:185px;height:104px;">
+        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="showToast('Added to your list!')">+</button>
+          </div>
+          <div class="card-title">Black Mirror</div>
+          <div class="card-meta">S7 · E2</div>
+        </div>
+      </div>
+      <!-- Card 6 -->
+      <div class="card" style="width:185px;height:104px;">
+        <img src="https://images.unsplash.com/photo-1547638375-ebf04735d792?w=300&q=80" alt="">
+        <div class="card-social-badge" style="background:rgba(229,9,20,.8);border:none;color:#fff;">🔥 Trending</div>
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="showToast('Added to your list!')">+</button>
+          </div>
+          <div class="card-title">Money Heist</div>
+          <div class="card-meta">S5 · Final Season</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-header">
+      <span class="row-title">🔥 Trending Discussions</span>
+      <span class="row-explore" onclick="navigate('forum')">Join the conversation →</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <div class="activity-item" onclick="openVideo('Stranger Things')" style="cursor:pointer;">
+        <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=100&q=80" alt=""></div>
+        <div class="activity-body">
+          <div class="activity-user">Stranger Things S4 Finale <span class="tag tag-hot" style="margin-left:6px;">🔥 HOT</span></div>
+          <div class="activity-show" style="color:var(--text2);font-size:13px;margin-top:4px;">"That ending completely broke me. No spoilers but..."</div>
+          <div class="activity-time" style="margin-top:6px;">4.2k comments · 892 upvotes</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="openVideo('Wednesday')" style="cursor:pointer;">
+        <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=100&q=80" alt=""></div>
+        <div class="activity-body">
+          <div class="activity-user">Wednesday S2 <span class="tag tag-new" style="margin-left:6px;">NEW</span></div>
+          <div class="activity-show" style="color:var(--text2);font-size:13px;margin-top:4px;">Episode 1 reaction thread — what did you think?</div>
+          <div class="activity-time" style="margin-top:6px;">1.8k comments · 421 upvotes</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="openVideo('Squid Game')" style="cursor:pointer;">
+        <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=100&q=80" alt=""></div>
+        <div class="activity-body">
+          <div class="activity-user">Squid Game S3 <span class="tag tag-spoiler" style="margin-left:6px;">SPOILERS</span></div>
+          <div class="activity-show" style="color:var(--text2);font-size:13px;margin-top:4px;">Character theory megathread — the ending explained</div>
+          <div class="activity-time" style="margin-top:6px;">3.1k comments · 670 upvotes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="row-header">
+      <span class="row-title">⭐ Top Picks for You · Based on your friends</span>
+    </div>
+    <div class="scroll-row">
+      <div class="card" style="width:140px;height:210px;" onclick="openVideo('Breaking Bad')">
+        <img src="https://images.unsplash.com/photo-1547638375-ebf04735d792?w=200&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="event.stopPropagation();showToast('Added!')">+</button>
+          </div>
+          <div class="card-title">Breaking Bad</div>
+        </div>
+      </div>
+      <div class="card" style="width:140px;height:210px;" onclick="openVideo('Stranger Things')">
+        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=200&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="event.stopPropagation();showToast('Added!')">+</button>
+          </div>
+          <div class="card-title">Ozark</div>
+        </div>
+      </div>
+      <div class="card" style="width:140px;height:210px;" onclick="openVideo('Squid Game')">
+        <img src="https://images.unsplash.com/photo-1619779023000-51c31b75b30e?w=200&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="event.stopPropagation();showToast('Added!')">+</button>
+          </div>
+          <div class="card-title">The Queen's Gambit</div>
+        </div>
+      </div>
+      <div class="card" style="width:140px;height:210px;" onclick="openVideo('Black Mirror')">
+        <img src="https://images.unsplash.com/photo-1573164574397-dd250bc8a598?w=200&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="event.stopPropagation();showToast('Added!')">+</button>
+          </div>
+          <div class="card-title">The Witcher</div>
+        </div>
+      </div>
+      <div class="card" style="width:140px;height:210px;" onclick="openVideo('Money Heist')">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="event.stopPropagation();showToast('Added!')">+</button>
+          </div>
+          <div class="card-title">Mindhunter</div>
+        </div>
+      </div>
+      <div class="card" style="width:140px;height:210px;" onclick="openVideo('YOU')">
+        <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=200&q=80" alt="">
+        <div class="card-overlay">
+          <div class="card-actions">
+            <button class="card-btn card-btn-play">▶</button>
+            <button class="card-btn card-btn-add" onclick="event.stopPropagation();showToast('Added!')">+</button>
+          </div>
+          <div class="card-title">YOU</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 48px 32px;display:flex;gap:12px;align-items:center;">
+    <div style="flex:1;background:linear-gradient(135deg,rgba(229,9,20,.12),rgba(229,9,20,.04));border:1px solid rgba(229,9,20,.2);border-radius:12px;padding:24px 28px;cursor:pointer;" onclick="navigate('wrapped')">
+      <div style="font-size:24px;margin-bottom:8px;">🎁</div>
+      <div style="font-size:16px;font-weight:700;">Your 2025 Wrapped is Ready</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:4px;">137,950 minutes watched · 23 genres · See your year →</div>
+    </div>
+    <div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 28px;cursor:pointer;" onclick="navigate('referral')">
+      <div style="font-size:24px;margin-bottom:8px;">🎟️</div>
+      <div style="font-size:16px;font-weight:700;">Invite Friends, Earn Rewards</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:4px;">Give 1 month free · Get 1 month free · Share the stream →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ CONNECT ════════════════════════════════════ -->
+<div class="page" id="page-connect">
+  <div class="connect-header">
+    <div>
+      <h1>Social Hub</h1>
+      <p>See what your friends are watching, sharing, and recommending</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost" onclick="openModal('add-friend')">+ Add Friend</button>
+      <button class="btn btn-red" onclick="navigate('watchparty')">🍿 Start Watch Party</button>
+    </div>
+  </div>
+  <div class="connect-grid">
+    <!-- Left Sidebar -->
+    <div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Online Now</div>
+        <div class="friend-item">
+          <div class="friend-avatar fa-online" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">R</div>
+          <div class="friend-info">
+            <div class="friend-name">Ryan</div>
+            <div class="friend-status">▶ Watching The Bear · S3E4</div>
+          </div>
+          <button class="btn btn-ghost friend-action" style="padding:6px 12px;font-size:12px;" onclick="navigate('watchparty')">Join</button>
+        </div>
+        <div class="friend-item">
+          <div class="friend-avatar fa-online" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);">J</div>
+          <div class="friend-info">
+            <div class="friend-name">Jean</div>
+            <div class="friend-status">▶ Wednesday · S2E1</div>
+          </div>
+          <button class="btn btn-ghost friend-action" style="padding:6px 12px;font-size:12px;" onclick="navigate('watchparty')">Join</button>
+        </div>
+        <div class="friend-item">
+          <div class="friend-avatar fa-online" style="background:linear-gradient(135deg,#27ae60,#229954);">C</div>
+          <div class="friend-info">
+            <div class="friend-name">Caleb</div>
+            <div class="friend-status">▶ Squid Game · S3E3</div>
+          </div>
+          <button class="btn btn-ghost friend-action" style="padding:6px 12px;font-size:12px;" onclick="navigate('watchparty')">Join</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">All Friends (12)</div>
+        <div class="friend-item">
+          <div class="friend-avatar" style="background:linear-gradient(135deg,#3498db,#2980b9);">L</div>
+          <div class="friend-info">
+            <div class="friend-name">Lucas</div>
+            <div class="friend-status">Last seen 2h ago</div>
+          </div>
+        </div>
+        <div class="friend-item">
+          <div class="friend-avatar" style="background:linear-gradient(135deg,#f39c12,#e67e22);">M</div>
+          <div class="friend-info">
+            <div class="friend-name">Marcus</div>
+            <div class="friend-status">Last seen 5h ago</div>
+          </div>
+        </div>
+        <div class="friend-item">
+          <div class="friend-avatar" style="background:linear-gradient(135deg,#1abc9c,#16a085);">S</div>
+          <div class="friend-info">
+            <div class="friend-name">Sophie</div>
+            <div class="friend-status">Last seen yesterday</div>
+          </div>
+        </div>
+        <div style="text-align:center;padding:12px;color:var(--netflix-red);font-size:13px;cursor:pointer;" onclick="openModal('add-friend')">+ Invite more friends</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(229,9,20,.1),rgba(229,9,20,.04));border:1px solid rgba(229,9,20,.2);border-radius:10px;padding:16px;margin-top:8px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">👥 Grow your social circle</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">Connect contacts & discover friends who love the same shows</div>
+        <button class="btn btn-red" style="width:100%;justify-content:center;font-size:13px;" onclick="openModal('add-friend')">Link Contacts</button>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div>
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <button class="forum-tab active" id="feed-tab-all" onclick="switchFeedTab('all')">All Activity</button>
+        <button class="forum-tab" id="feed-tab-watch" onclick="switchFeedTab('watch')">Watching</button>
+        <button class="forum-tab" id="feed-tab-reviews" onclick="switchFeedTab('reviews')">Reviews</button>
+        <button class="forum-tab" id="feed-tab-recs" onclick="switchFeedTab('recs')">Recommendations</button>
+      </div>
+
+      <div id="feed-content">
+        <!-- Activity 1 -->
+        <div class="activity-item">
+          <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=100&q=80" alt=""></div>
+          <div class="activity-body">
+            <div class="activity-user">Ryan <span>finished watching</span></div>
+            <div class="activity-show">The Bear · Season 3 · "Just binged the whole season in one day 🔥"</div>
+            <div class="activity-react">
+              <button class="react-btn" onclick="likePost(this)">❤️ 14</button>
+              <button class="react-btn" onclick="showToast('Comment posted!')">💬 Reply</button>
+              <button class="react-btn" onclick="showToast('Added The Bear to your list!')">+ Add to List</button>
+            </div>
+            <div class="activity-time">2 hours ago</div>
+          </div>
+        </div>
+        <!-- Activity 2 -->
+        <div class="activity-item">
+          <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=100&q=80" alt=""></div>
+          <div class="activity-body">
+            <div class="activity-user">Jean <span>recommended</span></div>
+            <div class="activity-show">Wednesday S2 · "Okay I know I'm a few days late but THIS SHOW. Drop everything."</div>
+            <div class="activity-react">
+              <button class="react-btn" onclick="likePost(this)">❤️ 8</button>
+              <button class="react-btn" onclick="showToast('Comment posted!')">💬 Reply</button>
+              <button class="react-btn" onclick="showToast('Added Wednesday to your list!')">+ Add to List</button>
+            </div>
+            <div class="activity-time">5 hours ago</div>
+          </div>
+        </div>
+        <!-- Activity 3 -->
+        <div class="activity-item">
+          <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=100&q=80" alt=""></div>
+          <div class="activity-body">
+            <div class="activity-user">Caleb <span>rated ★★★★★</span></div>
+            <div class="activity-show">Fallout S1 · "Best video game adaptation ever made. Period."</div>
+            <div class="activity-react">
+              <button class="react-btn" onclick="likePost(this)">❤️ 23</button>
+              <button class="react-btn" onclick="showToast('Comment posted!')">💬 Reply</button>
+              <button class="react-btn" onclick="showToast('Added Fallout to your list!')">+ Add to List</button>
+            </div>
+            <div class="activity-time">Yesterday</div>
+          </div>
+        </div>
+        <!-- Activity 4: Watch Party invite -->
+        <div class="activity-item" style="border-color:rgba(229,9,20,.3);background:rgba(229,9,20,.04);">
+          <div class="activity-thumb"><img src="https://images.unsplash.com/photo-1547638375-ebf04735d792?w=100&q=80" alt=""></div>
+          <div class="activity-body">
+            <div class="activity-user">Ryan <span>started a</span> <strong style="color:var(--netflix-red);">Watch Party</strong></div>
+            <div class="activity-show">Money Heist · S5 Final Season · 3 people watching</div>
+            <div class="activity-react">
+              <button class="react-btn" style="background:var(--netflix-red);color:#fff;" onclick="navigate('watchparty')">🍿 Join Now</button>
+              <button class="react-btn" onclick="showToast('Declined')">Decline</button>
+            </div>
+            <div class="activity-time">Active now</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ FORUM ════════════════════════════════════ -->
+<div class="page" id="page-forum">
+  <div class="forum-layout">
+    <!-- Sidebar -->
+    <div class="forum-sidebar">
+      <div style="padding:0 20px 16px;border-bottom:1px solid var(--border);">
+        <div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;font-weight:600;">Browse Shows</div>
+        <input class="input-field" style="margin-bottom:0;" placeholder="🔍 Search shows..." oninput="">
+      </div>
+      <div class="forum-sidebar-item active" onclick="selectForumShow('Stranger Things')">
+        <span class="fsidebar-icon">📺</span> Stranger Things
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('Wednesday')">
+        <span class="fsidebar-icon">🖤</span> Wednesday
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('The Bear')">
+        <span class="fsidebar-icon">🔪</span> The Bear
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('Squid Game')">
+        <span class="fsidebar-icon">🦑</span> Squid Game
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('Fallout')">
+        <span class="fsidebar-icon">☢️</span> Fallout
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('Money Heist')">
+        <span class="fsidebar-icon">🎭</span> Money Heist
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('Black Mirror')">
+        <span class="fsidebar-icon">📱</span> Black Mirror
+      </div>
+      <div class="forum-sidebar-item" onclick="selectForumShow('YOU')">
+        <span class="fsidebar-icon">👀</span> YOU
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="forum-main">
+      <div class="forum-show-header">
+        <div class="forum-show-poster">
+          <img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=200&q=80" alt="" id="forumPosterImg">
+        </div>
+        <div class="forum-show-info">
+          <h2 id="forumShowTitle">Stranger Things</h2>
+          <div class="season">Season 4 · 9 Episodes · <span style="color:var(--green);">96% Liked</span></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="tag tag-hot">🔥 Trending</span>
+            <span class="tag tag-new">4.2k Comments</span>
+            <span style="font-size:12px;color:var(--text2);padding:3px;">892 upvotes this week</span>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button class="btn btn-red" style="font-size:13px;padding:8px 18px;" onclick="navigate('watchparty')">🍿 Watch Party</button>
+            <button class="btn btn-ghost" style="font-size:13px;padding:8px 18px;" onclick="showToast('Following Stranger Things discussions!')">+ Follow</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="forum-tabs">
+        <button class="forum-tab active" onclick="switchForumTab('hot')">🔥 Hot</button>
+        <button class="forum-tab" onclick="switchForumTab('new')">🆕 New</button>
+        <button class="forum-tab" onclick="switchForumTab('ep')">📺 Per Episode</button>
+        <button class="forum-tab" onclick="switchForumTab('theories')">🧠 Theories</button>
+      </div>
+
+      <!-- Post Composer -->
+      <div class="post-composer">
+        <div class="post-avatar" style="background:linear-gradient(135deg,#E50914,#831010);">M</div>
+        <div style="flex:1;">
+          <textarea class="post-textarea" id="newPostText" placeholder="Share your thoughts on Stranger Things... (use [SPOILER] tags for spoilers)"></textarea>
+          <div class="post-actions">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <button class="react-btn" onclick="addEmoji('🔥')">🔥</button>
+              <button class="react-btn" onclick="addEmoji('😱')">😱</button>
+              <button class="react-btn" onclick="addEmoji('💔')">💔</button>
+              <button class="react-btn" onclick="addEmoji('🤯')">🤯</button>
+              <button class="react-btn" onclick="toggleSpoilerTag()">⚠️ Spoiler</button>
+            </div>
+            <button class="btn btn-red" style="font-size:13px;padding:8px 20px;" onclick="submitPost()">Post</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts -->
+      <div id="forum-posts">
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">R</div>
+            <div>
+              <div class="post-user">Ryan <span style="color:var(--netflix-red);font-size:11px;margin-left:4px;">★ Top Reviewer</span></div>
+              <div class="post-time">2 hours ago · Season 4 Finale</div>
+            </div>
+            <div class="post-badge tag tag-hot" style="margin-left:auto;">🔥 892 upvotes</div>
+          </div>
+          <div class="post-body">
+            That finale was absolutely devastating. The way they tied everything back to the first season... I wasn't ready. Vecna's backstory completely recontextualises everything.
+            <br><br>
+            <span class="spoiler" onclick="this.style.background='rgba(255,255,255,.1)';this.style.color='#fff';">[SPOILER] Click to reveal — Max's ending</span>
+          </div>
+          <div class="post-footer">
+            <div class="post-stat liked" onclick="toggleLike(this)">♥ 892</div>
+            <div class="post-stat" onclick="showToast('Showing 127 replies...')">💬 127 replies</div>
+            <div class="post-stat" onclick="showToast('Saved to bookmarks!')">🔖 Save</div>
+            <div class="post-stat" onclick="showToast('Post shared!')">↗ Share</div>
+          </div>
+        </div>
+
+        <div class="post-card" style="animation-delay:.1s;">
+          <div class="post-header">
+            <div class="post-avatar" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);">J</div>
+            <div>
+              <div class="post-user">Jean</div>
+              <div class="post-time">5 hours ago · Episode 7</div>
+            </div>
+            <div class="post-badge tag tag-new" style="margin-left:auto;">NEW</div>
+          </div>
+          <div class="post-body">
+            Can we talk about the Vecna scenes? The practical effects team deserves every award. This season felt like a full horror film budget squeezed into a streaming show. 
+            <br><br>
+            Also — the Kate Bush moment in episode 4 might be the single greatest scene in Netflix history. There, I said it.
+          </div>
+          <div class="post-footer">
+            <div class="post-stat" onclick="toggleLike(this)">♥ 421</div>
+            <div class="post-stat" onclick="showToast('Showing 64 replies...')">💬 64 replies</div>
+            <div class="post-stat" onclick="showToast('Saved!')">🔖 Save</div>
+            <div class="post-stat">↗ Share</div>
+          </div>
+        </div>
+
+        <div class="post-card" style="animation-delay:.2s;">
+          <div class="post-header">
+            <div class="post-avatar" style="background:linear-gradient(135deg,#27ae60,#229954);">C</div>
+            <div>
+              <div class="post-user">Caleb <span style="color:var(--gold);font-size:11px;margin-left:4px;">🧠 Theory Crafter</span></div>
+              <div class="post-time">Yesterday · General</div>
+            </div>
+          </div>
+          <div class="post-body">
+            <strong>THEORY:</strong> The Upside Down is actually a parallel timeline created by Eleven's trauma — not a separate dimension. The shadow particles behave like repressed memories given physical form. Anyone else getting this vibe? The evidence in S3 is actually pointing this direction if you look at the timestamps...
+          </div>
+          <div class="post-footer">
+            <div class="post-stat" onclick="toggleLike(this)">♥ 234</div>
+            <div class="post-stat" onclick="showToast('Opening thread...')">💬 89 replies</div>
+            <div class="post-stat" onclick="showToast('Saved!')">🔖 Save</div>
+            <div class="post-stat">↗ Share</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trending Sidebar -->
+    <div class="forum-trending">
+      <div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;font-weight:600;">Trending This Week</div>
+      <div class="trending-card" onclick="selectForumShow('Wednesday')">
+        <div class="trending-num">01</div>
+        <div class="trending-title">Wednesday S2</div>
+        <div class="trending-count">18.4k discussions</div>
+      </div>
+      <div class="trending-card" onclick="selectForumShow('Stranger Things')">
+        <div class="trending-num">02</div>
+        <div class="trending-title">Stranger Things S4</div>
+        <div class="trending-count">14.2k discussions</div>
+      </div>
+      <div class="trending-card" onclick="selectForumShow('Squid Game')">
+        <div class="trending-num">03</div>
+        <div class="trending-title">Squid Game S3</div>
+        <div class="trending-count">9.8k discussions</div>
+      </div>
+      <div class="trending-card">
+        <div class="trending-num">04</div>
+        <div class="trending-title">Fallout</div>
+        <div class="trending-count">7.1k discussions</div>
+      </div>
+      <div class="trending-card">
+        <div class="trending-num">05</div>
+        <div class="trending-title">Money Heist S5</div>
+        <div class="trending-count">4.9k discussions</div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px;font-weight:600;">Your Followers Active</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:20px;padding:4px 12px;font-size:12px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#e74c3c,#c0392b);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">R</div> Ryan
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:20px;padding:4px 12px;font-size:12px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#9b59b6,#8e44ad);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">J</div> Jean
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:20px;padding:4px 12px;font-size:12px;">
+            <div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#27ae60,#229954);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">C</div> Caleb
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ WATCH PARTY ════════════════════════════════════ -->
+<div class="page" id="page-watchparty">
+  <div class="wp-layout">
+    <!-- Player -->
+    <div class="wp-player" style="position:relative;background:#000;display:flex;flex-direction:column;">
+      <!-- Show picker bar -->
+      <div id="show-picker" style="background:rgba(20,20,20,.95);border-bottom:1px solid #333;padding:10px 16px;display:flex;align-items:center;gap:8px;overflow-x:auto;flex-shrink:0;">
+        <span style="font-size:11px;color:#6b6b6b;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;margin-right:4px;">NOW PLAYING:</span>
+        <button class="show-pick-btn active" onclick="switchShow(this,'oBMSCEFHZwQ','Stranger Things S4','Season 4 Trailer','strange-info')">Stranger Things</button>
+        <button class="show-pick-btn" onclick="switchShow(this,'Di310WS8zLk','Wednesday','Season 1 Trailer','wednesday-info')">Wednesday</button>
+        <button class="show-pick-btn" onclick="switchShow(this,'FRViDwZXXvk','The Bear','Season 1 Trailer','bear-info')">The Bear</button>
+        <button class="show-pick-btn" onclick="switchShow(this,'oqxAJKy0ii4','Squid Game','Season 1 Trailer','squid-info')">Squid Game</button>
+        <button class="show-pick-btn" onclick="switchShow(this,'nfhTiqoX4fI','Black Mirror','Season 7 Trailer','bm-info')">Black Mirror</button>
+        <button class="show-pick-btn" onclick="switchShow(this,'T3q-DPqS9VQ','Money Heist','Season 5 Trailer','heist-info')">Money Heist</button>
+      </div>
+
+      <!-- HTML5 video fills remaining space -->
+      <div style="flex:1;position:relative;min-height:0;">
+        <video id="wpVideo"
+          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;"
+          autoplay controls loop>
+        </video>
+        <!-- Overlay badges -->
+        <div class="wp-host-badge" style="position:absolute;top:12px;left:12px;z-index:10;">👑 HOST: RYAN</div>
+        <div class="wp-watching" style="position:absolute;top:12px;right:12px;z-index:10;">
+          <div class="live-dot"></div>
+          <span id="watcherCount">4 watching</span>
+          <div style="display:flex;margin-left:4px;">
+            <div class="member-avatar" style="background:#e74c3c;width:20px;height:20px;font-size:8px;border:1.5px solid #000;">R</div>
+            <div class="member-avatar" style="background:#9b59b6;width:20px;height:20px;font-size:8px;border:1.5px solid #000;">J</div>
+            <div class="member-avatar" style="background:#27ae60;width:20px;height:20px;font-size:8px;border:1.5px solid #000;">C</div>
+            <div class="member-avatar" style="background:linear-gradient(135deg,#E50914,#831010);width:20px;height:20px;font-size:8px;border:1.5px solid #000;">M</div>
+          </div>
+        </div>
+        <!-- show info bottom-left -->
+        <div style="position:absolute;bottom:12px;left:12px;z-index:10;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);border-radius:8px;padding:8px 14px;">
+          <div id="wp-ep-title" style="font-size:14px;font-weight:700;">Stranger Things S4</div>
+          <div id="wp-ep-sub" style="font-size:12px;color:#b3b3b3;margin-top:2px;">Season 4 Trailer · Official</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="wp-chat">
+      <div class="wp-chat-header">
+        <div>
+          <h3>Watch Party Chat</h3>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">Stranger Things S4 · Episode 9</div>
+        </div>
+        <div class="wp-party-members">
+          <div class="member-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);z-index:4;" title="Ryan">R</div>
+          <div class="member-avatar" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);z-index:3;" title="Jean">J</div>
+          <div class="member-avatar" style="background:linear-gradient(135deg,#27ae60,#229954);z-index:2;" title="Caleb">C</div>
+          <div class="member-avatar" style="background:linear-gradient(135deg,#E50914,#831010);z-index:1;" title="Marcus (You)">M</div>
+        </div>
+      </div>
+
+      <div class="wp-messages" id="chatMessages">
+        <div class="msg">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">R</div>
+          <div class="msg-body">
+            <div class="msg-name" style="color:#e74c3c;">Ryan</div>
+            <div class="msg-text">bro this really caught up from the start — it never gets old!</div>
+            <div class="msg-time">1:02:14</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);">J</div>
+          <div class="msg-body">
+            <div class="msg-name" style="color:#9b59b6;">Jean</div>
+            <div class="msg-text">the acting from the entire cast is just amazing</div>
+            <div class="msg-time">1:03:45</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#27ae60,#229954);">C</div>
+          <div class="msg-body">
+            <div class="msg-name" style="color:#27ae60;">Caleb</div>
+            <div class="msg-text">Hopper is the best character. No contest <span class="emoji">🔥</span></div>
+            <div class="msg-time">1:04:12</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);">J</div>
+          <div class="msg-body">
+            <div class="msg-name" style="color:#9b59b6;">Jean</div>
+            <div class="msg-text">this episode is such a throwback to 80s <span class="emoji">📼</span></div>
+            <div class="msg-time">1:05:30</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">R</div>
+          <div class="msg-body">
+            <div class="msg-name" style="color:#e74c3c;">Ryan</div>
+            <div class="msg-text">They really caught her this time!! <span class="emoji">😱</span></div>
+            <div class="msg-time">1:06:08</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#27ae60,#229954);">C</div>
+          <div class="msg-body">
+            <div class="msg-name" style="color:#27ae60;">Caleb</div>
+            <div class="msg-text">Eleven is about to go WILD <span class="emoji">⚡</span></div>
+            <div class="msg-time">1:06:22</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--text3);padding:4px 0;">Now at 1:06:39</div>
+      </div>
+
+      <!-- Quick reactions -->
+      <div class="reaction-row">
+        <div class="reaction-pill" onclick="sendReaction('😱 Shocked!')">😱</div>
+        <div class="reaction-pill" onclick="sendReaction('🔥 Fire!')">🔥</div>
+        <div class="reaction-pill" onclick="sendReaction('💔 Crying...')">💔</div>
+        <div class="reaction-pill" onclick="sendReaction('😂 LOL')">😂</div>
+        <div class="reaction-pill" onclick="sendReaction('🤯 Mind blown!')">🤯</div>
+        <div class="reaction-pill" onclick="sendReaction('👏 Clapping!')">👏</div>
+        <div class="reaction-pill" onclick="sendReaction('⚡ Epic!')">⚡</div>
+        <div class="reaction-pill" onclick="sendReaction('❤️ Love this!')">❤️</div>
+      </div>
+
+      <div class="wp-input-area">
+        <input class="wp-input" id="chatInput" placeholder="Say something..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="wp-send" onclick="sendChat()">↑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ WRAPPED ════════════════════════════════════ -->
+<div class="page" id="page-wrapped">
+  <div class="wrapped-hero">
+    <div class="wrapped-bg"></div>
+    <div class="wrapped-year">2025</div>
+    <div class="wrapped-subtitle">Here's your year, <span class="wrapped-username">Marcus</span></div>
+    <p style="color:var(--text2);font-size:15px;margin-top:8px;position:relative;z-index:1;">You watched more than <strong style="color:#fff;">92%</strong> of Netflix users this year 🏆</p>
+  </div>
+
+  <div class="wrapped-stats">
+    <div class="wrapped-stat-card">
+      <div class="wrapped-stat-num">137,950</div>
+      <div class="wrapped-stat-label">Minutes Watched</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px;">≈ 96 days of content</div>
+    </div>
+    <div class="wrapped-stat-card">
+      <div class="wrapped-stat-num">43</div>
+      <div class="wrapped-stat-label">Shows & Movies</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px;">Across 23 genres</div>
+    </div>
+    <div class="wrapped-stat-card">
+      <div class="wrapped-stat-num">4</div>
+      <div class="wrapped-stat-label">Watch Parties Hosted</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px;">With 12 friends</div>
+    </div>
+  </div>
+
+  <div class="wrapped-sections">
+    <!-- Top Genres -->
+    <div class="wrapped-card">
+      <div class="wrapped-card-title">Your Top Genres</div>
+      <div class="genre-bar">
+        <div class="genre-label"><span>🎭 Thriller</span><span>34%</span></div>
+        <div class="genre-bar-bg"><div class="genre-bar-fill" style="width:34%"></div></div>
+      </div>
+      <div class="genre-bar">
+        <div class="genre-label"><span>🚀 Sci-Fi</span><span>28%</span></div>
+        <div class="genre-bar-bg"><div class="genre-bar-fill" style="width:28%"></div></div>
+      </div>
+      <div class="genre-bar">
+        <div class="genre-label"><span>😱 Horror</span><span>19%</span></div>
+        <div class="genre-bar-bg"><div class="genre-bar-fill" style="width:19%"></div></div>
+      </div>
+      <div class="genre-bar">
+        <div class="genre-label"><span>😂 Comedy</span><span>12%</span></div>
+        <div class="genre-bar-bg"><div class="genre-bar-fill" style="width:12%"></div></div>
+      </div>
+      <div class="genre-bar">
+        <div class="genre-label"><span>🎬 Drama</span><span>7%</span></div>
+        <div class="genre-bar-bg"><div class="genre-bar-fill" style="width:7%"></div></div>
+      </div>
+    </div>
+
+    <!-- Top Shows -->
+    <div class="wrapped-card">
+      <div class="wrapped-card-title">Your Most Watched Shows</div>
+      <div class="top-show-item">
+        <div class="top-show-rank">1</div>
+        <div class="top-show-thumb"><img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=80&q=80" alt=""></div>
+        <div class="top-show-info">
+          <div class="top-show-title">Stranger Things</div>
+          <div class="top-show-eps">43 episodes rewatched</div>
+          <div class="top-show-bar"><div class="top-show-bar-fill" style="width:95%"></div></div>
+        </div>
+      </div>
+      <div class="top-show-item">
+        <div class="top-show-rank">2</div>
+        <div class="top-show-thumb"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=80&q=80" alt=""></div>
+        <div class="top-show-info">
+          <div class="top-show-title">Black Mirror</div>
+          <div class="top-show-eps">23 episodes</div>
+          <div class="top-show-bar"><div class="top-show-bar-fill" style="width:62%"></div></div>
+        </div>
+      </div>
+      <div class="top-show-item">
+        <div class="top-show-rank">3</div>
+        <div class="top-show-thumb"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=80&q=80" alt=""></div>
+        <div class="top-show-info">
+          <div class="top-show-title">Wednesday</div>
+          <div class="top-show-eps">16 episodes</div>
+          <div class="top-show-bar"><div class="top-show-bar-fill" style="width:44%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Watching habits -->
+    <div class="wrapped-card">
+      <div class="wrapped-card-title">Your Binge Stats</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div style="text-align:center;padding:16px;background:var(--bg3);border-radius:8px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--netflix-red);">2AM</div>
+          <div style="font-size:12px;color:var(--text2);">Avg. watch time</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg3);border-radius:8px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--netflix-red);">4.2</div>
+          <div style="font-size:12px;color:var(--text2);">Episodes per session</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg3);border-radius:8px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--netflix-red);">Sat</div>
+          <div style="font-size:12px;color:var(--text2);">Favourite day</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--bg3);border-radius:8px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--netflix-red);">7</div>
+          <div style="font-size:12px;color:var(--text2);">Full show binges</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social stats -->
+    <div class="wrapped-card">
+      <div class="wrapped-card-title">Your Social Highlights</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px;">
+          <span style="font-size:24px;">💬</span>
+          <div>
+            <div style="font-size:14px;font-weight:600;">142 Forum Posts</div>
+            <div style="font-size:12px;color:var(--text2);">You're a top contributor in Stranger Things</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px;">
+          <span style="font-size:24px;">🍿</span>
+          <div>
+            <div style="font-size:14px;font-weight:600;">4 Watch Parties Hosted</div>
+            <div style="font-size:12px;color:var(--text2);">12 unique friends joined your parties</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border-radius:8px;">
+          <span style="font-size:24px;">🎟️</span>
+          <div>
+            <div style="font-size:14px;font-weight:600;">3 Referrals → 3 Free Months</div>
+            <div style="font-size:12px;color:var(--text2);">You saved $45.75 through referrals</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapped-share-section">
+    <div style="font-size:20px;font-weight:700;margin-bottom:8px;">Share your Wrapped</div>
+    <div style="color:var(--text2);font-size:14px;margin-bottom:24px;">Let your friends know what defined your 2025</div>
+    <div class="share-card-preview">
+      <div style="margin-top:24px;">
+        <div style="font-size:32px;margin-bottom:8px;">🎬</div>
+        <div class="share-big">137,950</div>
+        <div class="share-label">Minutes watched in 2025</div>
+        <div style="margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;">
+          <span class="tag" style="background:rgba(229,9,20,.3);color:#ff6b6b;">Thriller</span>
+          <span class="tag" style="background:rgba(229,9,20,.3);color:#ff6b6b;">Sci-Fi</span>
+          <span class="tag" style="background:rgba(229,9,20,.3);color:#ff6b6b;">Horror</span>
+        </div>
+        <div style="margin-top:16px;font-size:12px;color:rgba(255,255,255,.4);letter-spacing:1px;">netflix.com/connect</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-red" onclick="showToast('📤 Sharing to Instagram Stories!')">Share to Instagram</button>
+      <button class="btn btn-ghost" onclick="showToast('🔗 Link copied to clipboard!')">Copy Link</button>
+      <button class="btn btn-ghost" onclick="showToast('🐦 Shared to X!')">Share to X</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ REFERRAL ════════════════════════════════════ -->
+<div class="page" id="page-referral">
+  <div class="referral-hero">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(229,9,20,.15);border:1px solid rgba(229,9,20,.3);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:20px;">🎟️ REFERRAL PROGRAM LIVE</div>
+    <h1>SHARE THE <span>STREAM.</span><br>EARN THE <span>REWARDS.</span></h1>
+    <p>Invite friends to Netflix Connect. Every successful referral unlocks a free month for you and your friend.</p>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div class="referral-link-box" style="margin-bottom:0;flex:1;max-width:460px;">
+        <div class="referral-url">netflix.com/ref/Marcus_x7k2</div>
+        <div class="referral-copied" id="copiedMsg">✓ Copied!</div>
+      </div>
+      <button class="btn btn-red" onclick="copyReferral()">Copy Link</button>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-ghost" onclick="showToast('📧 Email invite sent!')">📧 Email</button>
+      <button class="btn btn-ghost" onclick="showToast('💬 Message copied!')">💬 Message</button>
+      <button class="btn btn-ghost" onclick="showToast('📤 Sharing to Instagram!')">📸 Instagram</button>
+      <button class="btn btn-ghost" onclick="showToast('🐦 Shared to X!')">🐦 X</button>
+    </div>
+  </div>
+
+  <div class="referral-stats">
+    <div class="ref-stat">
+      <div class="ref-stat-num" style="color:var(--netflix-red);">8</div>
+      <div class="ref-stat-label">Friends Referred</div>
+    </div>
+    <div class="ref-stat">
+      <div class="ref-stat-num" style="color:var(--green);">5</div>
+      <div class="ref-stat-label">Converted</div>
+    </div>
+    <div class="ref-stat">
+      <div class="ref-stat-num" style="color:var(--gold);">5</div>
+      <div class="ref-stat-label">Free Months Earned</div>
+    </div>
+  </div>
+
+  <div class="referral-how">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">🔗</div>
+        <div class="step-title">Share your link</div>
+        <div class="step-desc">Send your unique referral link to friends via message, email, or social media.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">📺</div>
+        <div class="step-title">Friend subscribes</div>
+        <div class="step-desc">When they sign up for any Netflix plan using your link, the referral is confirmed.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">🎁</div>
+        <div class="step-title">You both get rewarded</div>
+        <div class="step-desc">You earn 1 free month. Your friend gets their first month free. Everyone wins.</div>
+      </div>
+    </div>
+    <div style="background:rgba(229,9,20,.06);border:1px solid rgba(229,9,20,.2);border-radius:10px;padding:16px 24px;margin-top:16px;font-size:14px;color:var(--text2);">
+      ⚡ <strong style="color:#fff;">Limited time:</strong> Referred users get their first month completely free. Offer available during the Netflix Connect launch period only.
+    </div>
+  </div>
+
+  <div class="referral-history">
+    <h2>Your Referral History</h2>
+    <div class="referral-table">
+      <div class="rt-header">
+        <div>Friend</div>
+        <div>Date</div>
+        <div>Status</div>
+        <div>Reward</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#e74c3c,#c0392b);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">R</div>
+          Ryan K.
+        </div>
+        <div style="color:var(--text2);">Jan 2025</div>
+        <div><span class="rt-status status-active">● Active</span></div>
+        <div style="color:var(--green);font-weight:600;">+1 Month Free</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#9b59b6,#8e44ad);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">J</div>
+          Jean L.
+        </div>
+        <div style="color:var(--text2);">Mar 2025</div>
+        <div><span class="rt-status status-active">● Active</span></div>
+        <div style="color:var(--green);font-weight:600;">+1 Month Free</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3498db,#2980b9);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">L</div>
+          Lucas T.
+        </div>
+        <div style="color:var(--text2);">Jun 2025</div>
+        <div><span class="rt-status status-active">● Active</span></div>
+        <div style="color:var(--green);font-weight:600;">+1 Month Free</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#27ae60,#229954);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">C</div>
+          Caleb M.
+        </div>
+        <div style="color:var(--text2);">Aug 2025</div>
+        <div><span class="rt-status status-active">● Active</span></div>
+        <div style="color:var(--green);font-weight:600;">+1 Month Free</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#f39c12,#e67e22);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">S</div>
+          Sophie W.
+        </div>
+        <div style="color:var(--text2);">Oct 2025</div>
+        <div><span class="rt-status status-active">● Active</span></div>
+        <div style="color:var(--green);font-weight:600;">+1 Month Free</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">A</div>
+          Alex D.
+        </div>
+        <div style="color:var(--text2);">Nov 2025</div>
+        <div><span class="rt-status status-pending">⏳ Pending</span></div>
+        <div style="color:var(--text3);">Awaiting signup</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">N</div>
+          Nina P.
+        </div>
+        <div style="color:var(--text2);">Dec 2025</div>
+        <div><span class="rt-status status-pending">⏳ Pending</span></div>
+        <div style="color:var(--text3);">Awaiting signup</div>
+      </div>
+      <div class="rt-row">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">K</div>
+          Kyle B.
+        </div>
+        <div style="color:var(--text2);">Dec 2025</div>
+        <div><span class="rt-status status-expired">✕ Expired</span></div>
+        <div style="color:var(--text3);">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════ PROFILE ════════════════════════════════════ -->
+<div class="page" id="page-profile">
+  <div class="profile-cover">
+    <div class="profile-cover-img"></div>
+    <div class="profile-cover-grad"></div>
+  </div>
+  <div class="profile-header">
+    <div class="profile-big-avatar">M</div>
+    <div class="profile-info">
+      <div class="profile-name">Marcus Chen</div>
+      <div class="profile-handle">@marcus · member since 2019</div>
+      <div class="profile-stats">
+        <div class="profile-stat" onclick="showToast('Viewing 124 followers')">
+          <div class="profile-stat-num">124</div>
+          <div class="profile-stat-label">Followers</div>
+        </div>
+        <div class="profile-stat" onclick="showToast('Viewing 98 following')">
+          <div class="profile-stat-num">98</div>
+          <div class="profile-stat-label">Following</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">43</div>
+          <div class="profile-stat-label">Shows Watched</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-num">142</div>
+          <div class="profile-stat-label">Posts</div>
+        </div>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <button class="btn btn-primary" onclick="openModal('edit-profile')">✏️ Edit Profile</button>
+      <button class="btn btn-ghost" onclick="navigate('wrapped')">🎁 View Wrapped</button>
+      <button class="btn btn-ghost" onclick="navigate('referral')">🎟️ Referral</button>
+    </div>
+  </div>
+
+  <!-- Badges -->
+  <div style="padding:0 48px;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(229,9,20,.12);border:1px solid rgba(229,9,20,.25);border-radius:20px;padding:6px 14px;font-size:12px;">
+      🏆 Top 8% Watcher 2025
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(70,211,105,.1);border:1px solid rgba(70,211,105,.25);border-radius:20px;padding:6px 14px;font-size:12px;">
+      ✅ Verified Binger
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.25);border-radius:20px;padding:6px 14px;font-size:12px;">
+      ⭐ Top Reviewer
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:6px 14px;font-size:12px;">
+      🍿 Watch Party Host
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:6px 14px;font-size:12px;">
+      🎟️ 5x Referrer
+    </div>
+  </div>
+
+  <div class="profile-tabs">
+    <div class="profile-tab active" onclick="switchProfileTab('watchlist')">My List (24)</div>
+    <div class="profile-tab" onclick="switchProfileTab('activity')">Activity</div>
+    <div class="profile-tab" onclick="switchProfileTab('reviews')">Reviews (18)</div>
+    <div class="profile-tab" onclick="switchProfileTab('friends')">Friends (12)</div>
+  </div>
+
+  <div class="profile-grid" id="profile-tab-content">
+    <div class="profile-watchlist" id="watchlist-grid">
+      <div class="watchlist-item" onclick="showToast('▶ Playing Stranger Things')">
+        <img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item" onclick="showToast('▶ Playing Wednesday')">
+        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item" onclick="showToast('▶ Playing Black Mirror')">
+        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item" onclick="showToast('▶ Playing Squid Game')">
+        <img src="https://images.unsplash.com/photo-1540324155974-23be9c954668?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item" onclick="showToast('▶ Playing Fallout')">
+        <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item" onclick="showToast('▶ Playing Money Heist')">
+        <img src="https://images.unsplash.com/photo-1547638375-ebf04735d792?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item">
+        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item">
+        <img src="https://images.unsplash.com/photo-1619779023000-51c31b75b30e?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item">
+        <img src="https://images.unsplash.com/photo-1573164574397-dd250bc8a598?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item">
+        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item">
+        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=200&q=80" alt="">
+        <div class="watchlist-item-overlay"><span>▶</span><span>✕</span></div>
+      </div>
+      <div class="watchlist-item" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);" onclick="showToast('Browsing all titles...')">
+        <div style="text-align:center;color:var(--text2);">
+          <div style="font-size:24px;margin-bottom:6px;">+</div>
+          <div style="font-size:12px;">12 more</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ MODALS ════════════════════════ -->
+<div class="modal-overlay" id="modal-add-friend">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-friend')">✕</button>
+    <h2>Find Friends</h2>
+    <p>Connect with friends who love great shows as much as you do.</p>
+    <input class="input-field" placeholder="🔍 Search by name or @username..." oninput="searchFriends(this.value)">
+    <div id="friend-results">
+      <div class="friend-suggest-item">
+        <div class="fs-avatar" style="background:linear-gradient(135deg,#1abc9c,#16a085);">S</div>
+        <div class="fs-info">
+          <div class="fs-name">Sophie Wong</div>
+          <div class="fs-mutual">3 mutual friends · Loves Thriller</div>
+        </div>
+        <button class="btn btn-red" style="padding:6px 14px;font-size:12px;" onclick="addFriend(this, 'Sophie')">+ Follow</button>
+      </div>
+      <div class="friend-suggest-item">
+        <div class="fs-avatar" style="background:linear-gradient(135deg,#e67e22,#d35400);">A</div>
+        <div class="fs-info">
+          <div class="fs-name">Alex Tan</div>
+          <div class="fs-mutual">1 mutual friend · Loves Sci-Fi</div>
+        </div>
+        <button class="btn btn-red" style="padding:6px 14px;font-size:12px;" onclick="addFriend(this, 'Alex')">+ Follow</button>
+      </div>
+      <div class="friend-suggest-item">
+        <div class="fs-avatar" style="background:linear-gradient(135deg,#2980b9,#1a5276);">N</div>
+        <div class="fs-info">
+          <div class="fs-name">Nina Park</div>
+          <div class="fs-mutual">2 mutual friends · Loves Horror</div>
+        </div>
+        <button class="btn btn-red" style="padding:6px 14px;font-size:12px;" onclick="addFriend(this, 'Nina')">+ Follow</button>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;" onclick="showToast('📱 Linking phone contacts...');closeModal('add-friend')">📱 Import Phone Contacts</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-edit-profile">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('edit-profile')">✕</button>
+    <h2>Edit Profile</h2>
+    <p>Customise how friends see you on Netflix Connect.</p>
+    <input class="input-field" value="Marcus Chen" placeholder="Display Name">
+    <input class="input-field" value="@marcus" placeholder="Username">
+    <textarea class="post-textarea" style="margin-bottom:12px;min-height:80px;" placeholder="Bio...">Thriller addict. Stranger Things stan. Night owl binger. 🌙</textarea>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:6px;">Profile Visibility</div>
+        <select class="input-field" style="margin-bottom:0;">
+          <option>Friends Only</option>
+          <option>Public</option>
+          <option>Private</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:6px;">Watch History</div>
+        <select class="input-field" style="margin-bottom:0;">
+          <option>Visible to Friends</option>
+          <option>Hidden</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-red" style="width:100%;justify-content:center;" onclick="showToast('✅ Profile updated!');closeModal('edit-profile')">Save Changes</button>
+  </div>
+</div>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal-overlay" id="videoModal" onclick="closeVideoModal(event)">
+  <div class="video-modal-box">
+    <button class="video-modal-close" onclick="closeVideoModal(null,true)">✕ Close</button>
+    <video id="videoModalPlayer" src="" style="width:100%;height:100%;background:#000;object-fit:contain;" controls autoplay></video>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── SHOW DATA (free Google CDN MP4s) ───
+const SHOWS = {
+  'Stranger Things': { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',       label: 'Season 4 · Official Clip' },
+  'Wednesday':       { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',            label: 'Season 1 · Official Clip' },
+  'The Bear':        { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4', label: 'Season 1 · Official Clip' },
+  'Squid Game':      { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',   label: 'Season 1 · Official Clip' },
+  'Black Mirror':    { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',      label: 'Season 7 · Official Clip' },
+  'Money Heist':     { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4', label: 'Part 5 · Official Clip' },
+  'Fallout':         { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', label: 'Season 1 · Official Clip' },
+  'Breaking Bad':    { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',    label: 'Official Clip' },
+  'YOU':             { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',      label: 'Season 4 · Official Clip' },
+  "Queen's Gambit":  { mp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4', label: 'Official Clip' },
+};
+
+// ─── VIDEO MODAL ───
+function openVideo(showName) {
+  const s = SHOWS[showName];
+  const url = s ? s.mp4 : 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+  const player = document.getElementById('videoModalPlayer');
+  player.src = url;
+  player.load();
+  player.play().catch(()=>{});
+  document.getElementById('videoModal').classList.add('open');
+}
+function closeVideoModal(e, force) {
+  if (force || (e && e.target === document.getElementById('videoModal'))) {
+    const player = document.getElementById('videoModalPlayer');
+    player.pause();
+    player.src = '';
+    document.getElementById('videoModal').classList.remove('open');
+  }
+}
+
+// ─── WATCH PARTY SHOW SWITCHER ───
+const WP_CHAT_POOLS = {
+  'Stranger Things': [
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"bro this never gets old 🔴"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the acting from the cast is just incredible"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Hopper is the GOAT. no contest 🏆"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"Vecna's theme is so unsettling 😱"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"this episode is such a throwback to 80s horror 📼"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Eleven is about to go absolutely WILD ⚡"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"that Kate Bush scene still makes me tear up 💔"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"wait wait wait — THAT just happened?!?! 😭"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"the VFX budget this season was INSANE"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"ok I wasn't ready for that. not at all 🤯"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"Max... 💔 they can't do this to us"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"PAUSE PAUSE is everyone seeing what I'm seeing"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"season 4 is genuinely peak TV 🔥🔥🔥"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the Duffer brothers really said 'let's traumatize everyone'"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"already planning the S5 watch party 😤"},
+  ],
+  'Wednesday': [
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"Jenna Ortega's facial expressions lmaooo 😂"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the vibe of this show is immaculate honestly"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"that dance scene is going to live in my head forever"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"okay Thing is actually the best character hands down 🖐️"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the Addams Family lore is so rich in this version"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Wednesday would absolutely destroy everyone here 😅"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"the mystery plot is actually really solid"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"S2 dropped and I haven't slept in 2 days 🖤"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"every episode ends on a cliffhanger why 😭"},
+  ],
+  'The Bear': [
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"the anxiety this show gives me is unreal 😤"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"Carmy's breakdown scene broke me. genuinely"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"this is the most stressful cooking show ever made 🔪"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"every episode feels like a short film honestly"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the YES CHEF energy is too real 😭"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Richie's character development >>> everything"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"the Christmas episode is one of the best single episodes I've ever seen"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"watching this while eating feels like a crime"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"S3 is even more chaotic and I love it 🔥"},
+  ],
+  'Squid Game': [
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"Red Light Green Light still gives me chills 🟥"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the social commentary in this is genuinely brilliant"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"I cannot believe they went THERE in S3 😱"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"the dalgona game was the most stressful thing I've watched"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"Gi-hun's arc across all seasons is so well written"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"the costume design 🩷🟦 iconic"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"every 'game' reveal moment hits differently"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the Player 001 twist is forever in the hall of fame 🤯"},
+  ],
+  'Black Mirror': [
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"okay which episode are we on? they all feel real now 😰"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"San Junipero made me cry for 3 hours I don't want to talk about it"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"this show aged into a documentary 📱"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"every episode is a different genre and it WORKS"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the social credit episode is just... too close to home"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Charlie Brooker is a genius and a monster 😂"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"I check my phone differently after watching this show"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"S7 hit different. that episode 3 though 🤯"},
+  ],
+  'Money Heist': [
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"BELLA CIAO 🎵🎵🎵"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the Professor is genuinely the greatest TV character ever written"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Tokyo's voiceover makes everything more dramatic"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"the red jumpsuits and Dalí masks are so iconic 🎭"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"Berlin's backstory hit completely different on rewatch"},
+    {u:'Caleb', c:'#27ae60', l:'C', t:"Part 5 Vol 2 had me screaming at my TV"},
+    {u:'Ryan',  c:'#e74c3c', l:'R', t:"this show made me feel 40 different emotions in one episode"},
+    {u:'Jean',  c:'#9b59b6', l:'J', t:"the heist planning scenes are genuinely thrilling 💰"},
+  ],
+};
+
+let currentShowName = 'Stranger Things';
+let chatMsgPool = [...WP_CHAT_POOLS['Stranger Things']];
+let chatPoolIdx = 0;
+let chatInterval = null;
+
+function switchShow(btn, ytId, showName, showSub) {
+  // Update button state
+  document.querySelectorAll('.show-pick-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Swap video src using MP4 map
+  const s = SHOWS[showName];
+  const url = s ? s.mp4 : 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+  const vid = document.getElementById('wpVideo');
+  vid.src = url;
+  vid.load();
+  vid.play().catch(()=>{});
+  // Update title
+  document.getElementById('wp-ep-title').textContent = showName;
+  document.getElementById('wp-ep-sub').textContent = showSub + ' · Official';
+  // Reset chat pool
+  currentShowName = showName;
+  chatMsgPool = [...(WP_CHAT_POOLS[showName] || WP_CHAT_POOLS['Stranger Things'])];
+  chatPoolIdx = 0;
+  // Announce switch
+  const sysDiv = document.createElement('div');
+  sysDiv.style.cssText = 'text-align:center;font-size:11px;color:#6b6b6b;padding:6px 0;';
+  sysDiv.textContent = `⟳ Party switched to "${showName}"`;
+  document.getElementById('chatMessages').appendChild(sysDiv);
+  document.getElementById('chatMessages').scrollTop = 99999;
+  showToast('🍿 Switched to ' + showName + ' — syncing for all 4 members!');
+}
+
+// ─── LIVE CHAT ENGINE ───
+function startLiveChat() {
+  if (chatInterval) clearInterval(chatInterval);
+  chatInterval = setInterval(() => {
+    // Only fire when watch party page is visible
+    if (!document.getElementById('page-watchparty').classList.contains('active')) return;
+    const msg = chatMsgPool[chatPoolIdx % chatMsgPool.length];
+    chatPoolIdx++;
+    addChatMsg(msg.l, msg.c, msg.u, msg.t, liveTime(), false);
+    // Occasionally inject a random reaction too
+    if (Math.random() < 0.3) {
+      const reactions = ['😱','🔥','💔','😂','🤯','👏','❤️','⚡','😭','🙌'];
+      const r = reactions[Math.floor(Math.random()*reactions.length)];
+      const pool = chatMsgPool;
+      const sender = pool[Math.floor(Math.random()*pool.length)];
+      setTimeout(() => addChatMsg(sender.l, sender.c, sender.u, r, liveTime(), false), 1400);
+    }
+  }, 3200); // new message every ~3.2s
+}
+
+function liveTime() {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+}
+
+// ─── NAVIGATION ───
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+  document.getElementById('notifPanel').classList.remove('open');
+  // Start live chat whenever watch party is open
+  if (page === 'watchparty') startLiveChat();
+}
+
+// ─── NAVBAR SCROLL ───
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('solid', window.scrollY > 60);
+});
+
+// ─── TOAST ───
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── NOTIFICATIONS ───
+function toggleNotif() {
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#notifPanel') && !e.target.closest('.nav-icon'))
+    document.getElementById('notifPanel').classList.remove('open');
+});
+
+// ─── MODALS ───
+function openModal(id) { document.getElementById('modal-' + id).classList.add('open'); }
+function closeModal(id) { document.getElementById('modal-' + id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ─── FORUM ───
+let spoilerMode = false;
+function switchForumTab(tab) {
+  document.querySelectorAll('.forum-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  showToast('Loading ' + tab + ' posts...');
+}
+function selectForumShow(show) {
+  document.querySelectorAll('.forum-sidebar-item').forEach(i => i.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('forumShowTitle').textContent = show;
+  showToast('📺 Switched to ' + show);
+}
+function addEmoji(e) { document.getElementById('newPostText').value += ' ' + e; }
+function toggleSpoilerTag() {
+  spoilerMode = !spoilerMode;
+  if (spoilerMode) document.getElementById('newPostText').value += ' [SPOILER] ';
+  showToast(spoilerMode ? '⚠️ Spoiler tag added' : 'Spoiler tag removed');
+}
+function submitPost() {
+  const text = document.getElementById('newPostText').value.trim();
+  if (!text) { showToast('Write something first!'); return; }
+  const card = document.createElement('div');
+  card.className = 'post-card';
+  card.innerHTML = `
+    <div class="post-header">
+      <div class="post-avatar" style="background:linear-gradient(135deg,#E50914,#831010);">M</div>
+      <div><div class="post-user">Marcus <span style="color:var(--text2);font-size:11px;">(You)</span></div>
+      <div class="post-time">Just now</div></div>
+      <div class="post-badge tag tag-new" style="margin-left:auto;">NEW</div>
+    </div>
+    <div class="post-body">${text}</div>
+    <div class="post-footer">
+      <div class="post-stat" onclick="toggleLike(this)">♥ 0</div>
+      <div class="post-stat">💬 0 replies</div>
+      <div class="post-stat">🔖 Save</div>
+      <div class="post-stat">↗ Share</div>
+    </div>`;
+  document.getElementById('forum-posts').prepend(card);
+  document.getElementById('newPostText').value = '';
+  showToast('✅ Post published!');
+}
+function toggleLike(el) {
+  el.classList.toggle('liked');
+  const n = parseInt(el.textContent.replace('♥ ',''));
+  el.textContent = '♥ ' + (el.classList.contains('liked') ? n+1 : n-1);
+}
+
+// ─── FEED TABS ───
+function switchFeedTab(tab) {
+  ['all','watch','reviews','recs'].forEach(t =>
+    document.getElementById('feed-tab-'+t).classList.remove('active'));
+  document.getElementById('feed-tab-'+tab).classList.add('active');
+  showToast('Showing ' + tab + ' activity...');
+}
+
+function likePost(btn) {
+  const n = parseInt(btn.textContent.replace('❤️ ',''));
+  btn.textContent = '❤️ ' + (n+1);
+  btn.style.background = 'rgba(229,9,20,.2)';
+  btn.style.color = 'var(--netflix-red)';
+  showToast('❤️ Liked!');
+}
+
+// ─── WATCH PARTY CHAT ───
+function addChatMsg(letter, color, user, text, time, isSelf) {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg' + (isSelf ? ' msg-self' : '');
+  if (isSelf) {
+    div.innerHTML = `
+      <div class="msg-avatar" style="background:linear-gradient(135deg,#E50914,#831010);">M</div>
+      <div class="msg-body">
+        <div class="msg-bubble">${text}</div>
+        <div class="msg-time" style="text-align:right;">${time}</div>
+      </div>`;
+  } else {
+    div.innerHTML = `
+      <div class="msg-avatar" style="background:linear-gradient(135deg,${color},${color}99);">${letter}</div>
+      <div class="msg-body">
+        <div class="msg-name" style="color:${color};">${user}</div>
+        <div class="msg-text">${text}</div>
+        <div class="msg-time">${time}</div>
+      </div>`;
+  }
+  div.style.animation = 'msgPop .2s ease';
+  container.appendChild(div);
+  // Trim to 80 messages max to avoid memory bloat
+  while (container.children.length > 80) container.removeChild(container.firstChild);
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addChatMsg('M','#E50914','Marcus', text, liveTime(), true);
+  input.value = '';
+}
+
+function sendReaction(reaction) {
+  addChatMsg('M','#E50914','Marcus', reaction, liveTime(), true);
+}
+
+// ─── REFERRAL ───
+function copyReferral() {
+  document.getElementById('copiedMsg').classList.add('show');
+  showToast('🔗 Referral link copied!');
+  setTimeout(()=>document.getElementById('copiedMsg').classList.remove('show'), 2500);
+}
+
+// ─── PROFILE TABS ───
+const watchlistHTML = `<div class="profile-watchlist" id="watchlist-grid">
+  ${[
+    ['Stranger Things','https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=200&q=80'],
+    ['Wednesday','https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=200&q=80'],
+    ['Black Mirror','https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&q=80'],
+    ['Squid Game','https://images.unsplash.com/photo-1540324155974-23be9c954668?w=200&q=80'],
+    ['Fallout','https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=200&q=80'],
+    ['Money Heist','https://images.unsplash.com/photo-1547638375-ebf04735d792?w=200&q=80'],
+    ['The Bear','https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=200&q=80'],
+    ["Queen's Gambit",'https://images.unsplash.com/photo-1619779023000-51c31b75b30e?w=200&q=80'],
+    ['The Witcher','https://images.unsplash.com/photo-1573164574397-dd250bc8a598?w=200&q=80'],
+    ['YOU','https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200&q=80'],
+    ['Breaking Bad','https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=200&q=80'],
+  ].map(([name,img]) => `
+    <div class="watchlist-item" onclick="openVideo('${name}')">
+      <img src="${img}" alt="${name}">
+      <div class="watchlist-item-overlay">
+        <span title="Watch trailer">▶</span>
+        <span onclick="event.stopPropagation();showToast('Removed from list!')">✕</span>
+      </div>
+    </div>`).join('')}
+  <div class="watchlist-item" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);" onclick="showToast('Browsing all titles...')">
+    <div style="text-align:center;color:var(--text2);"><div style="font-size:24px;margin-bottom:6px;">+</div><div style="font-size:12px;">12 more</div></div>
+  </div>
+</div>`;
+
+function switchProfileTab(tab) {
+  document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const content = document.getElementById('profile-tab-content');
+  if (tab === 'watchlist') { content.innerHTML = watchlistHTML; }
+  else if (tab === 'activity') {
+    content.innerHTML = `<div style="max-width:600px;">
+      <div class="activity-item"><div class="activity-thumb"><img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=100&q=80" alt=""></div><div class="activity-body"><div class="activity-user">You <span>posted in</span> Stranger Things forum</div><div class="activity-show">"That finale was absolutely devastating..."</div><div class="activity-time">2 hours ago</div></div></div>
+      <div class="activity-item"><div class="activity-thumb"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=100&q=80" alt=""></div><div class="activity-body"><div class="activity-user">You <span>added to list</span></div><div class="activity-show">Wednesday S2</div><div class="activity-time">Yesterday</div></div></div>
+      <div class="activity-item"><div class="activity-thumb"><img src="https://images.unsplash.com/photo-1547638375-ebf04735d792?w=100&q=80" alt=""></div><div class="activity-body"><div class="activity-user">You <span>hosted a Watch Party</span></div><div class="activity-show">Money Heist S5 · 4 friends joined</div><div class="activity-time">3 days ago</div></div></div>
+    </div>`;
+  } else if (tab === 'reviews') {
+    content.innerHTML = `<div style="max-width:600px;line-height:1.8;color:var(--text2);">
+      <p>★★★★★ <strong style="color:#fff;">Stranger Things S4</strong> — "The best season yet. Vecna is the most terrifying villain in Netflix history."</p><br>
+      <p>★★★★☆ <strong style="color:#fff;">The Bear S3</strong> — "Intense, claustrophobic, brilliant. Episode 6 is peak television."</p><br>
+      <p>★★★★★ <strong style="color:#fff;">Fallout S1</strong> — "Best video game adaptation. Period."</p><br>
+      <p>★★★★☆ <strong style="color:#fff;">Wednesday S2</strong> — "Jenna Ortega is a generational talent. Thing is the real MVP."</p>
+    </div>`;
+  } else {
+    content.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      ${['Ryan','Jean','Caleb','Lucas','Marcus','Sophie'].map((n,i)=>`
+        <div class="friend-item" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;">
+          <div class="friend-avatar" style="background:linear-gradient(135deg,hsl(${i*55},70%,45%),hsl(${i*55+20},60%,35%));">${n[0]}</div>
+          <div class="friend-info"><div class="friend-name">${n}</div><div class="friend-status">Watching Netflix</div></div>
+        </div>`).join('')}
+    </div>`;
+  }
+}
+
+// ─── ADD FRIEND ───
+function addFriend(btn, name) {
+  btn.textContent = '✓ Following';
+  btn.style.background = 'transparent';
+  btn.style.border = '1px solid rgba(255,255,255,.3)';
+  showToast('Now following ' + name + '!');
+}
+function searchFriends(val) {
+  if (val) showToast('Searching for "' + val + '"...');
+}
+
+// ─── INIT ───
+document.getElementById('mainNav').classList.add('solid');
+// Seed the watchlist on profile page
+document.getElementById('profile-tab-content').innerHTML = watchlistHTML;
+// Start live chat on load (watch party page loads pre-warmed)
+startLiveChat();
+</script>
+</body>
+</html>
